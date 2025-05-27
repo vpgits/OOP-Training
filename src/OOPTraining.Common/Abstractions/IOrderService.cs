@@ -1,7 +1,10 @@
+using OOPTraining.Common.Abstractions.Data;
+
 namespace OOPTraining.Common.Abstractions;
 
-public interface IOrderService<T> where T : class
+public interface IOrderService
 {
-    T TakeOrder();
-    void ShowReceipt(T order);
+    FullOrder TakeOrder();
+    OrderCustomer TakeCustomerInfo();
+    void ShowReceipt(FullOrder order);
 }

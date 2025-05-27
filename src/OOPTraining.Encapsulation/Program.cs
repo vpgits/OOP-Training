@@ -2,129 +2,65 @@
 using OOPTraining.Encapsulation.Models.Good;
 using OOPTraining.Encapsulation.Models.Bad;
 using OOPTraining.Common.Services;
-using OOPTraining.Common.Entities;
-
-
 
 Console.WriteLine("=== OOP Training: Encapsulation Demo ===\n");
 
-var orderService = new PizzaOrderService(new ConsoleInputService(), new ConsoleOutputService());
+var orderService = new OrderService(new ConsoleInputService(), new ConsoleOutputService());
+var fullOrder = orderService.TakeOrder();
 
-// Use new API to collect both customer info and order
-var fullOrder = orderService.TakeOrderWithCustomer();
-
-Console.WriteLine("\n" + "=".PadRight(50, '='));
-Console.WriteLine("COMPARING ENCAPSULATION APPROACHES");
-Console.WriteLine("=".PadRight(50, '='));
-
-// Pass both customer and order data to demonstrations
-DemonstrateGoodEncapsulation(fullOrder.Customer, fullOrder.Order);
-
-Console.WriteLine();
-
-DemonstrateBadEncapsulation(fullOrder.Customer, fullOrder.Order);
-
-// Show enhanced receipt with customer info
-Console.WriteLine("\n" + "=".PadRight(50, '='));
-Console.WriteLine("FINAL ORDER RECEIPT");
-Console.WriteLine("=".PadRight(50, '='));
-orderService.ShowFullReceipt(fullOrder);
-
-
-static void DemonstrateGoodEncapsulation(OrderCustomer orderCustomer, PizzaOrder order)
+if (fullOrder.PizzaOrder == null)
 {
-    Console.WriteLine("✅ GOOD ENCAPSULATION EXAMPLE:");
-    Console.WriteLine("--------------------------------");
-
-    // Create customer using actual customer data from order service
-    var customer = new Customer(orderCustomer.Name, orderCustomer.Email);
-    Console.WriteLine($"Customer: {customer.Name} ({customer.Email})");
-
-    var goodPizza = new Pizza(ToPizzaSize(order.Size));
-
-    foreach (var orderTopping in order.Toppings)
-    {
-        var success = goodPizza.AddTopping(ToPizzaTopping(orderTopping));
-        Console.WriteLine($"Adding {orderTopping}: {(success ? "✅ Success" : "❌ Failed")}");
-    }
-
-    Console.WriteLine($"Final Pizza: {goodPizza}");
-    Console.WriteLine($"Price calculated automatically: ${goodPizza.Price:F2}");
-
-    /*
-    // goodPizza.Size = PizzaSize.Small;           // ❌ COMPILE ERROR: readonly property
-    // goodPizza._toppings.Add("Hacker");          // ❌ COMPILE ERROR: private field  
-    // goodPizza.Toppings.Add("Virus");            // ❌ COMPILE ERROR: readonly collection
-    // customer.Name = "Hacker";                   // ❌ COMPILE ERROR: private setter
-    */
-
-    Console.WriteLine("🔒 Data is protected from external modification!");
+    Console.WriteLine("No pizza order to demonstrate encapsulation.");
+    return;
 }
 
-static void DemonstrateBadEncapsulation(OrderCustomer orderCustomer, PizzaOrder order)
+DemonstrateGoodEncapsulation(fullOrder);
+DemonstrateBadEncapsulation(fullOrder);
+
+orderService.ShowReceipt(fullOrder);
+
+static void DemonstrateGoodEncapsulation(FullOrder fullOrder)
 {
-    Console.WriteLine("❌ BAD ENCAPSULATION EXAMPLE:");
-    Console.WriteLine("-------------------------------");
+    Console.WriteLine("=== GOOD Encapsulation ===");
+
+    var customer = new Customer(fullOrder.Customer.Name, fullOrder.Customer.Email);
+    var pizza = new Pizza(fullOrder.PizzaOrder!.Size.ToEntity());
+
+    foreach (var topping in fullOrder.PizzaOrder.Toppings)
+    {
+        pizza.AddTopping(topping.ToEntity());
+    }
+
+    Console.WriteLine($"Customer: {customer.Name}");
+    Console.WriteLine($"Pizza: {pizza}");
+    Console.WriteLine($"Price: ${pizza.Price:F2}");
+    Console.WriteLine("Data is protected from external modification");
+}
+
+static void DemonstrateBadEncapsulation(FullOrder fullOrder)
+{
+    Console.WriteLine("\n=== BAD Encapsulation ===");
 
     var badPizza = new BadPizza();
-    badPizza.customerName = orderCustomer.Name;  // Use actual customer name
-    badPizza.size = order.Size.ToString().ToLower();
+    badPizza.customerName = fullOrder.Customer.Name;
+    badPizza.size = fullOrder.PizzaOrder!.Size.ToString().ToLower();
 
-    foreach (var orderTopping in order.Toppings)
+    foreach (var topping in fullOrder.PizzaOrder.Toppings)
     {
-        badPizza.AddTopping(orderTopping.ToString());
-        Console.WriteLine($"Added {orderTopping} (no validation)");
+        badPizza.AddTopping(topping.ToString());
     }
 
     badPizza.CalculatePrice();
-
-    Console.WriteLine($"Pizza created with manual steps");
-    badPizza.PrintInfo();
-
-    Console.WriteLine("\n🚨 DEMONSTRATING DANGERS:");
+    Console.WriteLine($"Customer: {badPizza.customerName}");
+    Console.WriteLine($"Pizza: {badPizza.size} with {badPizza.toppings.Count} toppings");
+    Console.WriteLine($"Price: ${badPizza.price:F2}");
 
     badPizza.price = -100;
-    Console.WriteLine($"Someone set price to: ${badPizza.price} (negative price!)");
+    badPizza.size = "INVALID";
+    badPizza.GetToppings().Add("Poison");
 
-    badPizza.size = "GIGANTIC";
-    Console.WriteLine($"Someone set size to: {badPizza.size} (invalid size!)");
-
-    var toppings = badPizza.GetToppings();
-    toppings.Add("Poison");
-    toppings.Add("Glass");
-    Console.WriteLine($"Someone added dangerous toppings: {string.Join(", ", toppings)}");
-
-    toppings.Clear();
-    Console.WriteLine($"Oops! All toppings cleared. Remaining: {badPizza.toppings.Count}");
-
-    Console.WriteLine("🔓 No protection from data corruption!");
-}
-
-static PizzaSize ToPizzaSize(OrderPizzaSize orderSize)
-{
-    return orderSize switch
-    {
-        OrderPizzaSize.Small => PizzaSize.Small,
-        OrderPizzaSize.Medium => PizzaSize.Medium,
-        OrderPizzaSize.Large => PizzaSize.Large,
-        _ => PizzaSize.Medium
-    };
-}
-
-static PizzaTopping ToPizzaTopping(OrderPizzaTopping orderTopping)
-{
-    return orderTopping switch
-    {
-        OrderPizzaTopping.Pepperoni => PizzaTopping.Pepperoni,
-        OrderPizzaTopping.Mushrooms => PizzaTopping.Mushrooms,
-        OrderPizzaTopping.Onions => PizzaTopping.Onions,
-        OrderPizzaTopping.Sausage => PizzaTopping.Sausage,
-        OrderPizzaTopping.Bacon => PizzaTopping.Bacon,
-        OrderPizzaTopping.ExtraCheese => PizzaTopping.ExtraCheese,
-        OrderPizzaTopping.BlackOlives => PizzaTopping.BlackOlives,
-        OrderPizzaTopping.GreenPeppers => PizzaTopping.GreenPeppers,
-        OrderPizzaTopping.Pineapple => PizzaTopping.Pineapple,
-        OrderPizzaTopping.Spinach => PizzaTopping.Spinach,
-        _ => PizzaTopping.ExtraCheese
-    };
+    Console.WriteLine("After corruption:");
+    Console.WriteLine($"Price: ${badPizza.price:F2} (negative!)");
+    Console.WriteLine($"Size: {badPizza.size} (invalid!)");
+    Console.WriteLine($"Toppings: {badPizza.toppings.Count} (corrupted!)");
 }
