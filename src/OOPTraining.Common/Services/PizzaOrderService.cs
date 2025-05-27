@@ -14,12 +14,12 @@ public class PizzaOrderService : IOrderService<PizzaOrder>
         _outputService = outputService;
     }
 
+    // EXISTING API - Maintains backward compatibility
     public PizzaOrder TakeOrder()
     {
         try
         {
             _outputService.DisplayOutput("=== Welcome to Pizza Palace ===");
-
 
             var customerName = GetValidInput(
                 "Enter customer name: ",
@@ -27,11 +27,9 @@ public class PizzaOrderService : IOrderService<PizzaOrder>
                 "Customer name cannot be empty."
             );
 
-
             var size = GetValidEnum<OrderPizzaSize>(
                 $"Enter pizza size ({string.Join(", ", Enum.GetNames<OrderPizzaSize>())}): "
             );
-
 
             var toppings = GetValidToppings();
 
@@ -52,6 +50,64 @@ public class PizzaOrderService : IOrderService<PizzaOrder>
         }
     }
 
+    // NEW API - Collects full customer info + pizza order
+    public FullPizzaOrder TakeOrderWithCustomer()
+    {
+        try
+        {
+            _outputService.DisplayOutput("=== Welcome to Pizza Palace ===");
+
+            // Collect customer information
+            var customer = TakeCustomerInfo();
+
+            // Collect pizza order (reuse existing logic but with customer name)
+            var order = TakePizzaOrder(customer.Name);
+
+            var result = new FullPizzaOrder(customer, order);
+            ;
+            _outputService.DisplayOutput("Full order created successfully!");
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _outputService.DisplayError("Failed to create full order", ex);
+            throw;
+        }
+    }
+
+    // NEW API - Just customer info collection (can be used standalone)
+    public OrderCustomer TakeCustomerInfo()
+    {
+        try
+        {
+            _outputService.DisplayOutput("\n--- Customer Information ---");
+
+            var customerName = GetValidInput(
+                "Enter customer name: ",
+                input => !string.IsNullOrWhiteSpace(input),
+                "Customer name cannot be empty."
+            );
+
+            var email = GetValidInput(
+                "Enter customer email: ",
+                input => !string.IsNullOrWhiteSpace(input) && input.Contains('@'),
+                "Please enter a valid email address."
+            );
+
+            return new OrderCustomer
+            {
+                Name = customerName.Trim(),
+                Email = email.Trim()
+            };
+        }
+        catch (Exception ex)
+        {
+            _outputService.DisplayError("Failed to collect customer info", ex);
+            throw;
+        }
+    }
+
+    // EXISTING API - Maintains backward compatibility
     public void ShowReceipt(PizzaOrder order)
     {
         try
@@ -79,6 +135,55 @@ public class PizzaOrderService : IOrderService<PizzaOrder>
         }
     }
 
+    // NEW API - Enhanced receipt with full customer info
+    public void ShowFullReceipt(FullPizzaOrder fullOrder)
+    {
+        try
+        {
+            _outputService.DisplayOutput("\n=== PIZZA PALACE RECEIPT ===");
+            _outputService.DisplayOutput($"Customer: {fullOrder.Customer.Name}");
+            _outputService.DisplayOutput($"Email: {fullOrder.Customer.Email}");
+            _outputService.DisplayOutput($"Size: {fullOrder.Order.Size} Pizza");
+
+            if (fullOrder.Order.Toppings.Any())
+            {
+                var toppingsDisplay = string.Join(", ", fullOrder.Order.Toppings.Select(FormatToppingName));
+                _outputService.DisplayOutput($"Toppings: {toppingsDisplay}");
+            }
+            else
+            {
+                _outputService.DisplayOutput("Toppings: None (Plain Pizza)");
+            }
+
+            _outputService.DisplayOutput($"Items: {fullOrder.Order.Toppings.Count + 1} (1 pizza + {fullOrder.Order.Toppings.Count} toppings)");
+            _outputService.DisplayOutput("================================");
+        }
+        catch (Exception ex)
+        {
+            _outputService.DisplayError("Failed to display full receipt", ex);
+        }
+    }
+
+    // PRIVATE HELPER - Extracted pizza order logic
+    private PizzaOrder TakePizzaOrder(string customerName)
+    {
+        _outputService.DisplayOutput("\n--- Pizza Order ---");
+
+        var size = GetValidEnum<OrderPizzaSize>(
+            $"Enter pizza size ({string.Join(", ", Enum.GetNames<OrderPizzaSize>())}): "
+        );
+
+        var toppings = GetValidToppings();
+
+        return new PizzaOrder
+        {
+            CustomerName = customerName,
+            Size = size,
+            Toppings = toppings
+        };
+    }
+
+    // EXISTING PRIVATE METHODS - Unchanged for compatibility
     private string GetValidInput(string prompt, Func<string, bool> validator, string errorMessage)
     {
         while (true)
