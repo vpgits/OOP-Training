@@ -151,11 +151,11 @@ public class OrderService(IInputService<string> inputService, IOutputService<str
 
         var toppings = GetValidToppings();
 
-        return new PizzaOrder
-        {
-            Size = size,
-            Toppings = toppings
-        };
+        return new PizzaOrder(
+            name: $"Pizza {string.Join(", ", toppings.Select(t => t.ToString()))} {size}",
+            size: size,
+            toppings: toppings
+        );
     }
 
     private BeverageOrder TakeBeverageOrder()
@@ -215,7 +215,7 @@ public class OrderService(IInputService<string> inputService, IOutputService<str
 
         if (order.PizzaOrder != null)
         {
-            count += 1 + order.PizzaOrder.Toppings.Count; // 1 pizza + toppings
+            count += 1; // 1 pizza
         }
 
         if (order.BeverageOrder != null)

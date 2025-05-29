@@ -1,4 +1,3 @@
-using OOPTraining.Common.Abstractions.Data;
 using OOPTraining.Common.Entities;
 
 namespace OOPTraining.AbstractionAndInheritance.Bad.Entities;

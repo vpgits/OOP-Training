@@ -1,0 +1,53 @@
+classDiagram
+    %% Data Entities
+    class OrderCustomer {
+        +string Name
+        +string Email
+        +string Phone
+    }
+    
+    class PizzaOrder {
+        +string Name
+        +string Size
+        +string Toppings
+    }
+    
+    class BeverageOrder {
+        +string Name
+        +string BeverageTemperature
+        +string BeverageSize
+    }
+    
+    class FullOrder {
+        +int OrderId
+        +datetime OrderDate
+        +decimal TotalAmount
+        +string Status
+    }
+    
+    %% Service Configuration Entities
+    class OrderServiceConfig {
+        +string ServiceName
+        +boolean IsActive
+        +string Version
+    }
+    
+    class InputServiceConfig {
+        +string InputType
+        +int TimeoutSeconds
+    }
+    
+    class OutputServiceConfig {
+        +string OutputFormat
+        +boolean ErrorLogging
+    }
+    
+    %% Composition Relationships
+    FullOrder *-- OrderCustomer : contains
+    FullOrder o-- PizzaOrder : includes
+    FullOrder o-- BeverageOrder : includes
+    
+    %% Configuration Relationships
+    OrderServiceConfig --> FullOrder : processes
+    OrderServiceConfig *-- InputServiceConfig : configures
+    OrderServiceConfig *-- OutputServiceConfig : configures

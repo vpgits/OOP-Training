@@ -1,0 +1,52 @@
+classDiagram
+    %% Data entities as classes
+    class Customer {
+        +int customer_id
+        +string name
+        +string email
+        +datetime created_at
+    }
+    
+    class PizzaOrder {
+        +int order_id
+        +int customer_id
+        +string size
+        +decimal base_price
+        +datetime order_date
+    }
+    
+    class BeverageOrder {
+        +int beverage_id
+        +int customer_id
+        +string beverage_type
+        +string size
+        +decimal price
+        +datetime order_date
+    }
+    
+    class PizzaTopping {
+        +int topping_id
+        +string name
+        +decimal price
+    }
+    
+    class OrderTopping {
+        +int order_id
+        +int topping_id
+        +int quantity
+    }
+    
+    class FullOrder {
+        +int full_order_id
+        +int customer_id
+        +decimal total_amount
+        +datetime created_at
+        +string status
+    }
+    
+    %% Relationships
+    Customer ||--o{ PizzaOrder : places
+    Customer ||--o{ BeverageOrder : places
+    Customer ||--o{ FullOrder : creates
+    PizzaOrder ||--o{ OrderTopping : has
+    PizzaTopping ||--o{ OrderTopping : used_in

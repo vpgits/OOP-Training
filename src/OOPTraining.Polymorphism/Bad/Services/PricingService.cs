@@ -2,6 +2,8 @@ using OOPTraining.Common.Entities;
 using OOPTraining.Polymorphism.Bad.Abstractions;
 using OOPTraining.Polymorphism.Bad.Entities;
 
+namespace OOPTraining.Polymorphism.Bad.Services;
+
 public class PricingService : IPricingService
 {
     public decimal CalculateOrderTotal(Order order)

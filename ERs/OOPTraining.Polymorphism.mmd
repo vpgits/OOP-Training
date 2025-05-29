@@ -1,0 +1,107 @@
+classDiagram
+    %% Common Infrastructure
+    class OrderService {
+        +FullOrder TakeOrder()
+        +void ShowReceipt()
+    }
+    
+    %% Bad Implementation - Type Checking
+    class TypeCheckingOrderService {
+        +decimal CalculateTotalPrice()
+        +string GetDisplayText()
+        +bool IsItemAvailable()
+        +List~string~ GetAvailableItemNames()
+    }
+    
+    class OrderProcessor {
+        +void ProcessOrder()
+        -void ProcessPizzaItem()
+        -void ProcessBeverageItem()
+    }
+    
+    class BadMenuItem {
+        #string Name
+        #decimal BasePrice
+        +abstract CalculatePrice()
+    }
+    
+    class BadPizza {
+        +PizzaSize Size
+        +List~string~ Toppings
+        +CalculatePrice()
+    }
+    
+    class BadBeverage {
+        +BeverageSize Size
+        +BeverageTemperature Temperature
+        +CalculatePrice()
+    }
+    
+    %% Good Implementation - Interface Polymorphism
+    class IOrderable {
+        <<interface>>
+        +GetDisplayName() string
+        +GetPrice() decimal
+        +IsAvailable() bool
+    }
+    
+    class MenuItem {
+        #string Name
+        #decimal BasePrice
+        +abstract CalculatePrice()
+        +virtual GetDisplayName()
+        +virtual GetPrice()
+        +virtual IsAvailable()
+    }
+    
+    class Pizza {
+        +PizzaSize Size
+        +List~string~ Toppings
+        +CalculatePrice()
+        +GetDisplayName()
+        +IsAvailable()
+    }
+    
+    class Beverage {
+        +BeverageSize Size
+        +BeverageTemperature Temperature
+        +CalculatePrice()
+        +GetDisplayName()
+        +IsAvailable()
+    }
+    
+    class PolymorphicOrderService {
+        +decimal CalculateTotalPrice()
+        +List~string~ GetAvailableItemNames()
+        +string FormatItemDisplay()
+        +List~IOrderable~ FilterAvailableItems()
+    }
+    
+    class OrderableCollection {
+        +decimal TotalPrice
+        +IEnumerable~IOrderable~ AvailableItems
+        +IEnumerable~string~ DisplayNames
+        +void AddIfAvailable()
+        +OrderableCollection GetAvailableItems()
+        +void PrintOrder()
+    }
+    
+    %% Inheritance Relationships
+    BadPizza --|> BadMenuItem : inherits
+    BadBeverage --|> BadMenuItem : inherits
+    
+    %% Interface Implementation
+    MenuItem ..|> IOrderable : implements
+    Pizza --|> MenuItem : inherits
+    Beverage --|> MenuItem : inherits
+    
+    %% Composition/Association
+    PolymorphicOrderService --> IOrderable : operates on
+    OrderableCollection --> IOrderable : contains
+    TypeCheckingOrderService --> BadMenuItem : uses
+    OrderProcessor --> BadMenuItem : processes
+    
+    %% Add notes for anti-patterns
+    note for TypeCheckingOrderService "❌ Uses type checking<br/>❌ if (item is Pizza)<br/>❌ Type casting required"
+    note for PolymorphicOrderService "✅ No type checking<br/>✅ items.Sum(i => i.GetPrice())<br/>✅ LINQ operations"
+    note for IOrderable "✅ Interface polymorphism<br/>✅ Virtual dispatch"

@@ -482,3 +482,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# User Specific
+src_dump.ps1
+source_code_dump.txt

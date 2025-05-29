@@ -1,0 +1,41 @@
+classDiagram
+    %% Common Infrastructure (Good Design)
+    class FullOrder {
+        -OrderCustomer customer
+        -PizzaOrder pizzaOrder
+        -BeverageOrder beverageOrder
+    }
+    
+    class OrderService {
+        +takeOrder()
+        +showReceipt()
+    }
+    
+    %% DisasterCode - Monolithic Anti-Pattern
+    class Pizza {
+        +string customerName
+        +string customerEmail
+        +string size
+        +List~string~ toppings
+        +string beverage
+        +string beverageSize
+        +double price
+        +string status
+        +bool isPaid
+        +calculateEverything()
+    }
+    
+    %% Program Flow
+    class Program {
+        +createsPizzaInstance()
+        +modifiesPublicFields()
+        +directManipulation()
+    }
+    
+    %% Relationships
+    Program --> OrderService : uses
+    Program --> FullOrder : receives
+    Program --> Pizza : "creates and corrupts"
+    
+    %% Anti-patterns annotations
+    note for Pizza "❌ Public fields<br/>❌ Mixed responsibilities<br/>❌ No encapsulation<br/>❌ Business logic in constructor<br/>❌ No validation<br/>❌ God object"

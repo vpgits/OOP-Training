@@ -1,0 +1,151 @@
+classDiagram
+    %% Common Infrastructure (Used)
+    class OrderService {
+        +TakeOrder()
+        +ShowReceipt()
+    }
+    
+    %% Bad Implementation - Kitchen Sink Interface
+    class IMenuItem {
+        <<interface>>
+        +Guid Id
+        +string Name
+        +decimal Price
+        +AddTopping()
+        +RemoveTopping()
+        +GetToppings()
+        +GetSize()
+        +SetTemperature()
+        +GetTemperature()
+        +SetSize()
+        +GetBeverageSize()
+        +CalculatePrice()
+        +GetDescription()
+    }
+    
+    class BadMenuItem {
+        +Guid Id
+        +string Name
+        +decimal Price
+        +ThrowsNotImplementedException()
+    }
+    
+    class BadPizza {
+        -List~PizzaTopping~ toppings
+        -PizzaSize size
+        +NewKeywordMethods()
+    }
+    
+    class BadBeverage {
+        -BeverageSize size
+        -BeverageTemperature temperature
+        +PizzaMethodsReturnFalse()
+    }
+    
+    class BadCustomer {
+        +CustomizePizza()
+        +CustomizeBeverage()
+        +GetTotalCost()
+    }
+    
+    class MenuManager {
+        +CalculatePizzaPrice()$
+        +CalculateBeveragePrice()$
+        +ValidateMenuItem()$
+        +GetItemDescription()$
+        +ProcessOrder()$
+    }
+    
+    %% Good Implementation - Clean Hierarchy
+    class IAuditable {
+        <<interface>>
+        +DateTime CreatedAt
+        +DateTime UpdatedAt
+        +string CreatedBy
+        +string UpdatedBy
+    }
+    
+    class IPricingService {
+        <<interface>>
+        +CalculateItemPrice()
+        +CalculateOrderTotal()
+        +ApplyDiscount()
+    }
+    
+    class BaseEntity {
+        <<abstract>>
+        +Guid Id
+        +DateTime CreatedAt
+        +DateTime UpdatedAt
+        +string CreatedBy
+        +string UpdatedBy
+    }
+    
+    class MenuItem {
+        <<abstract>>
+        #string Name
+        #decimal BasePrice
+        +CalculatePrice()*
+    }
+    
+    class Pizza {
+        +PizzaSize Size
+        +List~PizzaTopping~ Toppings
+        +CalculatePrice()
+    }
+    
+    class Beverage {
+        +BeverageSize Size
+        +BeverageTemperature Temperature
+        +CalculatePrice()
+    }
+    
+    class Customer {
+        +string Name
+        +string Email
+        +string Phone
+        +IsValid() bool
+    }
+    
+    class Order {
+        +Customer Customer
+        +List~MenuItem~ Items
+        +OrderStatus Status
+        +AddItem()
+        +CalculateTotal() decimal
+        +CanComplete() bool
+        +Complete()
+    }
+    
+    class PricingService {
+        +CalculateItemPrice() decimal
+        +CalculateOrderTotal() decimal
+        +ApplyDiscount() decimal
+    }
+    
+    %% Relationships - Bad Implementation
+    BadMenuItem ..|> IMenuItem : implements
+    BadPizza --|> BadMenuItem : inherits
+    BadBeverage --|> BadMenuItem : inherits
+    BadPizza ..> MenuManager : uses static
+    BadBeverage ..> MenuManager : uses static
+    BadCustomer ..> MenuManager : uses static
+    
+    %% Relationships - Good Implementation
+    BaseEntity ..|> IAuditable : implements
+    MenuItem --|> BaseEntity : inherits
+    Pizza --|> MenuItem : inherits
+    Beverage --|> MenuItem : inherits
+    Customer --|> BaseEntity : inherits
+    Order --|> BaseEntity : inherits
+    Order *-- Customer : contains
+    Order *-- MenuItem : contains
+    PricingService ..|> IPricingService : implements
+    
+    %% Notes for Anti-patterns vs Patterns
+    note for IMenuItem "❌ Kitchen sink interface"
+    note for MenuManager "❌ Static god class"
+    note for BadCustomer "❌ Feature envy"
+    note for MenuItem "✅ Abstract base class"
+    note for IPricingService "✅ Interface segregation"
+    note for Order "✅ Proper aggregation"
