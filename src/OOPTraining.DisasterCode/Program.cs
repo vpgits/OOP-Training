@@ -1,5 +1,4 @@
-﻿using OOPTraining.Common.Abstractions.Data;
-using OOPTraining.Common.Services;
+﻿using OOPTraining.Common.Services;
 
 var orderService = new OrderService(new ConsoleInputService(), new ConsoleOutputService());
 var fullOrder = orderService.TakeOrder();

@@ -1,8 +1,9 @@
+using OOPTraining.AbstractionAndInheritance.Bad.Abstractions;
 using OOPTraining.Common.Entities;
 
 namespace OOPTraining.AbstractionAndInheritance.Bad.Entities;
 
-public class Pizza(PizzaSize size, string name) : MenuItem(name, MenuManager.CalculatePizzaPrice(size, new List<PizzaTopping>()))
+public class Pizza(PizzaSize size, string name) : MenuItem(name, MenuManager.CalculatePizzaPrice(size, new List<PizzaTopping>())), IMenuItem
 {
     public new Guid Id { get; private init; }
     public new string Name { get; private set; } = string.Empty;

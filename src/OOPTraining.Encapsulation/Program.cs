@@ -1,7 +1,7 @@
 ﻿using OOPTraining.Common.Abstractions.Data;
-using OOPTraining.Encapsulation.Models.Good;
-using OOPTraining.Encapsulation.Models.Bad;
 using OOPTraining.Common.Services;
+using OOPTraining.Encapsulation.Models.Bad;
+using OOPTraining.Encapsulation.Models.Good;
 
 Console.WriteLine("=== OOP Training: Encapsulation Demo ===\n");
 

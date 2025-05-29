@@ -1,10 +1,11 @@
-﻿using BadAbstractions = OOPTraining.AbstractionAndInheritance.Bad.Abstractions;
+﻿using OOPTraining.Common.Abstractions.Data;
+using OOPTraining.Common.Entities;
+using OOPTraining.Common.Services;
+
+using BadAbstractions = OOPTraining.AbstractionAndInheritance.Bad.Abstractions;
 using BadEntities = OOPTraining.AbstractionAndInheritance.Bad.Entities;
 using GoodEntities = OOPTraining.AbstractionAndInheritance.Good.Entities;
 using GoodServices = OOPTraining.AbstractionAndInheritance.Good.Services;
-using OOPTraining.Common.Abstractions.Data;
-using OOPTraining.Common.Services;
-using OOPTraining.Common.Entities;
 
 Console.WriteLine("=== OOP Training: Abstraction and Inheritance ===\n");
 
@@ -110,5 +111,3 @@ static GoodEntities.Order CreateGoodOrder(FullOrder fullOrder)
 
     return order;
 }
-
-

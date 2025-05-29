@@ -1,5 +1,5 @@
-using OOPTraining.Polymorphism.Good.Entities;
 using OOPTraining.Common.Entities;
+using OOPTraining.Polymorphism.Good.Entities;
 
 using DTOEntities = OOPTraining.Common.Abstractions.Data;
 

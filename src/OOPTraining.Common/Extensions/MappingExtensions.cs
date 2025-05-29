@@ -1,5 +1,5 @@
-using OOPTraining.Common.Entities;
 using OOPTraining.Common.Abstractions.Data;
+using OOPTraining.Common.Entities;
 
 public static class MappingExtensions
 {

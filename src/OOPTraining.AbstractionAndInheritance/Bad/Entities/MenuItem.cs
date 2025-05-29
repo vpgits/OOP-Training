@@ -4,7 +4,7 @@ using OOPTraining.Common.Entities;
 
 namespace OOPTraining.AbstractionAndInheritance.Bad.Entities;
 
-public class MenuItem : IMenuItem
+public abstract class MenuItem : IMenuItem
 {
     public Guid Id { get; init; }
     public virtual string Name { get; set; }

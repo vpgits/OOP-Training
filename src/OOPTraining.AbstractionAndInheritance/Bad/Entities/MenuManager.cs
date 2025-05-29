@@ -5,7 +5,7 @@ namespace OOPTraining.AbstractionAndInheritance.Bad.Entities;
 
 public static class MenuManager
 {
-    
+
     private static readonly Dictionary<PizzaSize, decimal> PizzaBasePrices = new()
     {
         { PizzaSize.Small, 8.99m },
@@ -21,7 +21,7 @@ public static class MenuManager
         { BeverageSize.Large, 2.99m }
     };
 
-    
+
     public static decimal CalculatePizzaPrice(PizzaSize size, List<PizzaTopping> toppings)
     {
         var basePrice = PizzaBasePrices[size];
@@ -32,14 +32,14 @@ public static class MenuManager
     public static decimal CalculateBeveragePrice(BeverageSize size, BeverageTemperature temperature)
     {
         var basePrice = BeverageBasePrices[size];
-        
+
         if (temperature == BeverageTemperature.Hot) basePrice += 0.50m;
         return basePrice;
     }
 
     public static bool ValidateMenuItem(IMenuItem item)
     {
-        
+
         if (item is Pizza pizza)
         {
             return pizza.GetToppings().Count <= 10;
@@ -53,7 +53,7 @@ public static class MenuManager
 
     public static string GetItemDescription(IMenuItem item)
     {
-        
+
         if (item is Pizza pizza)
         {
             return $"Pizza: {pizza.Name} with {pizza.GetToppings().Count} toppings";
@@ -67,7 +67,7 @@ public static class MenuManager
 
     public static void ProcessOrder(Customer customer, List<IMenuItem> items)
     {
-        
+
         foreach (var item in items)
         {
             if (!ValidateMenuItem(item))

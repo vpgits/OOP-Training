@@ -1,9 +1,10 @@
 ﻿using OOPTraining.Common.Services;
-using BadEntities = OOPTraining.Polymorphism.Bad.Entities;
-using GoodEntities = OOPTraining.Polymorphism.Good.Entities;
-using GoodAbstractions = OOPTraining.Polymorphism.Good.Abstractions;
 using OOPTraining.Polymorphism.Bad.Services;
 using OOPTraining.Polymorphism.Good.Services;
+
+using BadEntities = OOPTraining.Polymorphism.Bad.Entities;
+using GoodAbstractions = OOPTraining.Polymorphism.Good.Abstractions;
+using GoodEntities = OOPTraining.Polymorphism.Good.Entities;
 
 var orderService = new OrderService(new ConsoleInputService(), new ConsoleOutputService());
 var typeCheckingService = new TypeCheckingOrderService();
