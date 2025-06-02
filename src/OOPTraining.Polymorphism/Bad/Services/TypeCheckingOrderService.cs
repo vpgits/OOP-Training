@@ -12,26 +12,11 @@ public class TypeCheckingOrderService
         {
             if (item is Pizza pizza)
             {
-                total += pizza.BasePrice;
-                foreach (var topping in pizza.Toppings)
-                {
-                    total += 2.50m;
-                }
+                total += pizza.CalculatePrice();
             }
             else if (item is Beverage beverage)
             {
-                switch (beverage.Size)
-                {
-                    case Common.Entities.BeverageSize.Small:
-                        total += 2.99m;
-                        break;
-                    case Common.Entities.BeverageSize.Medium:
-                        total += 3.99m;
-                        break;
-                    case Common.Entities.BeverageSize.Large:
-                        total += 4.99m;
-                        break;
-                }
+                total += beverage.CalculatePrice();
             }
         }
 

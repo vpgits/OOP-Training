@@ -4,6 +4,8 @@ namespace OOPTraining.AbstractionAndInheritance.Good.Entities;
 
 public class Pizza : MenuItem
 {
+    public override string Name { get; init; } = string.Empty;
+    public override decimal BasePrice { get; init; }
     public PizzaSize Size { get; init; }
     public List<PizzaTopping> Toppings { get; init; } = new();
 
@@ -19,5 +21,13 @@ public class Pizza : MenuItem
 
         var toppingCost = Toppings.Count * 1.50m;
         return BasePrice * sizeMultiplier + toppingCost;
+    }
+
+    public Pizza(string name, decimal basePrice, PizzaSize size, List<PizzaTopping> toppings)
+    {
+        Name = name;
+        BasePrice = basePrice;
+        Size = size;
+        Toppings = toppings;
     }
 }

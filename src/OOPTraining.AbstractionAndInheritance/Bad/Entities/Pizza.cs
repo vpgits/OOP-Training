@@ -10,17 +10,17 @@ public class Pizza(PizzaSize size, string name) : MenuItem(name, MenuManager.Cal
     public new decimal Price { get; private set; }
 
     private readonly List<PizzaTopping> _toppings = new();
-    private PizzaSize _size = size;
+    private PizzaSize size = size;
 
     public PizzaSize Size
     {
-        get => _size;
+        get => size;
         set
         {
-            if (_size != value)
+            if (size != value)
             {
-                _size = value;
-                Price = MenuManager.CalculatePizzaPrice(_size, _toppings);
+                size = value;
+                Price = MenuManager.CalculatePizzaPrice(size, _toppings);
             }
         }
     }
@@ -45,7 +45,7 @@ public class Pizza(PizzaSize size, string name) : MenuItem(name, MenuManager.Cal
 
     public new PizzaSize GetSize()
     {
-        return _size;
+        return size;
     }
 
     public new bool SetTemperature(BeverageTemperature temperature)
@@ -75,6 +75,6 @@ public class Pizza(PizzaSize size, string name) : MenuItem(name, MenuManager.Cal
 
     public override string GetDescription()
     {
-        return $"{Name} ({_size}) with {_toppings.Count} toppings - ${Price:F2}";
+        return $"{Name} ({size}) with {_toppings.Count} toppings - ${Price:F2}";
     }
 }

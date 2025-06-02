@@ -48,25 +48,25 @@ public class Beverage : IMenuItem
     public bool AddTopping(PizzaTopping topping)
     {
 
-        return false;
+        throw new NotImplementedException("Beverages do not support toppings.");
     }
 
     public bool RemoveTopping(PizzaTopping topping)
     {
 
-        return false;
+        throw new NotImplementedException("Beverages do not support toppings.");
     }
 
     public List<PizzaTopping> GetToppings()
     {
 
-        return new List<PizzaTopping>();
+        throw new NotImplementedException("Beverages do not support toppings.");
     }
 
     public PizzaSize GetSize()
     {
 
-        return PizzaSize.Medium;
+        throw new NotImplementedException("Beverages do not have a pizza size.");
     }
 
     public decimal CalculatePrice()

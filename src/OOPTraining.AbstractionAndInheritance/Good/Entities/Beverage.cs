@@ -4,6 +4,8 @@ namespace OOPTraining.AbstractionAndInheritance.Good.Entities;
 
 public class Beverage : MenuItem
 {
+    public override string Name { get; init; } = string.Empty;
+    public override decimal BasePrice { get; init; }
     public BeverageSize Size { get; init; }
     public BeverageTemperature Temperature { get; init; }
 
@@ -18,5 +20,13 @@ public class Beverage : MenuItem
         };
 
         return BasePrice * sizeMultiplier;
+    }
+
+    public Beverage(string name, decimal basePrice, BeverageSize size, BeverageTemperature temperature)
+    {
+        Name = name;
+        BasePrice = basePrice;
+        Size = size;
+        Temperature = temperature;
     }
 }

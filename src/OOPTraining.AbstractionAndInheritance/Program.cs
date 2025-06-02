@@ -87,25 +87,18 @@ static GoodEntities.Order CreateGoodOrder(FullOrder fullOrder)
 
     if (fullOrder.PizzaOrder != null)
     {
-        var pizza = new GoodEntities.Pizza
-        {
-            Name = "Custom Pizza",
-            BasePrice = 12.99m,
-            Size = fullOrder.PizzaOrder.Size.ToEntity(),
-            Toppings = [.. fullOrder.PizzaOrder.Toppings.Select(t => t.ToEntity())]
-        };
+        var pizza = new GoodEntities.Pizza("Custom Pizza", 12.99m, fullOrder.PizzaOrder.Size.ToEntity(), fullOrder.PizzaOrder.Toppings.Select(t => t.ToEntity()).ToList());
         order.AddItem(pizza);
     }
 
     if (fullOrder.BeverageOrder != null)
     {
-        var beverage = new GoodEntities.Beverage
-        {
-            Name = fullOrder.BeverageOrder.Name,
-            BasePrice = 3.99m,
-            Size = fullOrder.BeverageOrder.BeverageSize.ToEntity(),
-            Temperature = fullOrder.BeverageOrder.BeverageTemperature.ToEntity()
-        };
+        var beverage = new GoodEntities.Beverage(
+            fullOrder.BeverageOrder.Name,
+            1.0m,
+            fullOrder.BeverageOrder.BeverageSize.ToEntity(),
+            fullOrder.BeverageOrder.BeverageTemperature.ToEntity()
+        );
         order.AddItem(beverage);
     }
 
