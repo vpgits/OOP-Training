@@ -2,7 +2,7 @@ using OOPTraining.Polymorphism.Good.Abstractions;
 
 namespace OOPTraining.Polymorphism.Good.Services;
 
-public class PolymorphicOrderService
+public class PolymorphicOrderService : IOrderService<IOrderable>
 {
 
     public decimal CalculateTotalPrice(List<IOrderable> items)
@@ -17,14 +17,13 @@ public class PolymorphicOrderService
                 .Select(item => item.GetDisplayName())];
     }
 
-    public string FormatItemDisplay(IOrderable item)
+    public string GetDisplayText(IOrderable item)
     {
-        return $"{item.GetDisplayName()} - ${item.GetPrice():F2}";
+        return item.GetDisplayName();
     }
 
-    public List<IOrderable> FilterAvailableItems(List<IOrderable> items)
+    public bool IsItemAvailable(IOrderable item)
     {
-        return items.Where(item => item.IsAvailable()).ToList();
+        return item.IsAvailable();
     }
-
 }

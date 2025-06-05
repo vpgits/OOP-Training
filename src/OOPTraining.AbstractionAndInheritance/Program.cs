@@ -40,8 +40,8 @@ static void RunBadImplementation(FullOrder fullOrder)
     var menuItems = new List<BadAbstractions.IMenuItem> { pizza, beverage };
 
     Console.WriteLine("Kitchen sink interface forces inappropriate methods:");
-    Console.WriteLine($"Beverage add pepperoni: {beverage.AddTopping(PizzaTopping.Pepperoni)}");
-    Console.WriteLine($"Beverage toppings: {beverage.GetToppings().Count}");
+    // Console.WriteLine($"Beverage add pepperoni: {beverage.AddTopping(PizzaTopping.Pepperoni)}");
+    // Console.WriteLine($"Beverage toppings: {beverage.GetToppings().Count}");
 
     Console.WriteLine("Static god class with type checking:");
     foreach (var item in menuItems)

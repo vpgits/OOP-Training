@@ -24,7 +24,10 @@ static void DemonstrateGoodEncapsulation(FullOrder fullOrder)
     Console.WriteLine("=== GOOD Encapsulation ===");
 
     var customer = new Customer(fullOrder.Customer.Name, fullOrder.Customer.Email);
-    var pizza = new Pizza(fullOrder.PizzaOrder!.Size.ToEntity());
+    var pizza = new Pizza(fullOrder.PizzaOrder!.Size.ToEntity())
+    {
+        Size = fullOrder.PizzaOrder.Size.ToEntity()
+    };
 
     foreach (var topping in fullOrder.PizzaOrder.Toppings)
     {
@@ -42,6 +45,9 @@ static void DemonstrateBadEncapsulation(FullOrder fullOrder)
     Console.WriteLine("\n=== BAD Encapsulation ===");
 
     var badPizza = new BadPizza();
+    var badCustomer = new BadCustomer();
+    badCustomer.name = fullOrder.Customer.Name;
+    badCustomer.email = fullOrder.Customer.Email;
     badPizza.customerName = fullOrder.Customer.Name;
     badPizza.size = fullOrder.PizzaOrder!.Size.ToString().ToLower();
 

@@ -2,14 +2,12 @@ using OOPTraining.Common.Entities;
 
 namespace OOPTraining.AbstractionAndInheritance.Good.Entities;
 
-public class Beverage : MenuItem
+public sealed class Beverage : MenuItem
 {
-    public override string Name { get; init; } = string.Empty;
-    public override decimal BasePrice { get; init; }
     public BeverageSize Size { get; init; }
     public BeverageTemperature Temperature { get; init; }
 
-    public override decimal CalculatePrice()
+    public sealed override decimal CalculatePrice()
     {
         var sizeMultiplier = Size switch
         {
@@ -23,9 +21,8 @@ public class Beverage : MenuItem
     }
 
     public Beverage(string name, decimal basePrice, BeverageSize size, BeverageTemperature temperature)
+    : base(name, basePrice)
     {
-        Name = name;
-        BasePrice = basePrice;
         Size = size;
         Temperature = temperature;
     }

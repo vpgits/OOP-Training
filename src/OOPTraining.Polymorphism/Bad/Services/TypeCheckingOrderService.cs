@@ -2,7 +2,7 @@ using OOPTraining.Polymorphism.Bad.Entities;
 
 namespace OOPTraining.Polymorphism.Bad.Services;
 
-public class TypeCheckingOrderService
+public class TypeCheckingOrderService : IOrderService<MenuItem>
 {
     public decimal CalculateTotalPrice(List<MenuItem> items)
     {

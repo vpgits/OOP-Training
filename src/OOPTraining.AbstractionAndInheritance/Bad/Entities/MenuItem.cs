@@ -8,7 +8,7 @@ public abstract class MenuItem : IMenuItem
 {
     public Guid Id { get; init; }
     public virtual string Name { get; set; }
-    public virtual decimal Price { get; set; }
+    public  decimal Price { get; set; }
     public MenuItem(string name, decimal price)
     {
         Name = name;

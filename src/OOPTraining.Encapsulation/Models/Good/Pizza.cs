@@ -7,7 +7,7 @@ public class Pizza
 {
     private readonly List<PizzaTopping> _toppings = new();
 
-    public PizzaSize Size { get; private init; }
+    public PizzaSize Size { get; init; }
 
     public IReadOnlyList<PizzaTopping> Toppings => _toppings.AsReadOnly();
 
